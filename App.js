@@ -32,8 +32,9 @@ const App: () => Node = () => {
 
       <View>
 
-        <Picker>
-          <Picker.Item label="Dominican Pesos" value="DOP" enabled={false} />
+        <Picker enabled={false}>
+          <Picker.Item label="Dominican Pesos" value="DOP"  />
+          
 
         </Picker>
 
