@@ -21,7 +21,9 @@ const App: () => Node = () => {
   [baseValue, setBaseValue] = useState(0);
   [baseCurrency, setBaseCurrency] = useState("");
   [targetCurrency, setTargetCurrency] = useState("DOP");
-  [targetValue, setTargetValue] = useState(0)
+  [targetValue, setTargetValue] = useState(0);
+  
+  [isCorrect,setCorrect]=useState(true);
 
   useEffect(() => {
 
@@ -36,6 +38,11 @@ const App: () => Node = () => {
   }, [])
 
   useEffect(() => {
+
+    if(baseValue==="" || baseValue===undefined){
+      setTargetValue(0)
+      return;
+    }
 
     try {
       fetch('https://v6.exchangerate-api.com/v6/' + API_KEY + '/pair/' + baseCurrency + '/' + targetCurrency + '/' + baseValue.toString())
@@ -90,6 +97,22 @@ const App: () => Node = () => {
     }
   }
 
+  const onChangeText = (value) => {
+
+        
+    var regex = /^(\d*\.)?\d+$/
+
+    if(regex.test(value)){
+      setCorrect(true)
+    }else{
+      setCorrect(false);
+    }
+      
+
+    setBaseValue(value);
+
+
+  }
 
   return (
 
@@ -129,20 +152,14 @@ const App: () => Node = () => {
       </Picker>
 
       <View>
-        <TextInput keyboardType='numeric' style={styles.input} value={baseValue.toString()} onChangeText={(value) => {
-
-          console.log(value)
-
-          if (value === "" || value === undefined) {
-            setBaseValue(0)
-          }
-
-          setBaseValue(value)
-
-
-
-
-        }} ></TextInput>
+        
+        {isCorrect ? 
+        <TextInput keyboardType='numeric' style={styles.inputBaseCorrect} value={baseValue.toString()} onChangeText={onChangeText} ></TextInput>
+         :
+         <TextInput keyboardType='numeric' style={styles.inputBaseIncorrect} value={baseValue.toString()} onChangeText={onChangeText} ></TextInput>
+        }
+        
+        
       </View>
 
       <View>
@@ -154,9 +171,9 @@ const App: () => Node = () => {
         </Picker>
 
         {targetValue ?
-          <TextInput style={styles.input} value={targetValue.toString()} enabled={false} ></TextInput>
+          <TextInput style={styles.inputTarget} value={targetValue.toString()} enabled={false} ></TextInput>
           :
-          <TextInput style={styles.input} value={(0).toString()} editable={false} ></TextInput>}
+          <TextInput style={styles.inputTarget} value={(0).toString()} editable={false} ></TextInput>}
 
 
 
@@ -174,12 +191,24 @@ const App: () => Node = () => {
 
 };
 
-const styles = StyleSheet.create({
-  input: {
+var styles = StyleSheet.create({
+  inputTarget: {
     height: 40,
     margin: 12,
     borderWidth: 1,
   },
+  inputBaseCorrect: {
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    borderColor:"#000000"
+  },
+  inputBaseIncorrect: {
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    borderColor:"#ff0000"
+  }
 });
 
 
