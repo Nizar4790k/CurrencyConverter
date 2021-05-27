@@ -8,7 +8,7 @@
 
 import React, { useEffect, useState } from 'react';
 import type { Node } from 'react';
-import { View, StyleSheet, TextInput, SafeAreaView, Picker } from 'react-native';
+import { View, StyleSheet, TextInput, SafeAreaView, Picker, Share } from 'react-native';
 import ActionBar from 'react-native-action-bar';
 
 
@@ -68,6 +68,27 @@ const App: () => Node = () => {
 
   }
 
+  const onShare = async () => {
+    try {
+
+      const result = await Share.share({
+        message: baseValue.toString() + " " + baseCurrency + "=" + targetCurrency + " " + targetValue.toString()
+      })
+
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+
+        } else {
+
+        }
+      } else if (result.action === Share.sharedAction) {
+
+      }
+
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
 
   return (
@@ -88,7 +109,7 @@ const App: () => Node = () => {
           {
             image: require('./res/share.png'), // To use a custom image
 
-            onPress: () => console.log('Right Custom image !'),
+            onPress: () => {onShare()},
           }
         ]}
       />
