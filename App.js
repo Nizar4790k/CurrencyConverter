@@ -6,15 +6,44 @@
  * @flow strict-local
  */
 
-import React from 'react';
-import type { Node } from 'react';
+import React,{useEffect,useState} from 'react';
+import type { Node} from 'react';
 import { View, StyleSheet, TextInput, SafeAreaView, Picker } from 'react-native';
 
 
 
 const App: () => Node = () => {
 
+const API_KEY="61005f8b63dafdb85ded4930";
 
+  [currencies, setCurrencies] = useState([]);
+
+  useEffect(()=>{
+
+    fetchCodes();
+
+
+  },[])
+
+  async function fetchCodes(){
+    
+    const response = await fetch('https://v6.exchangerate-api.com/v6/'+API_KEY+'/codes');
+    const result= await response.json();
+    const coins =[];
+    supported_codes= result.supported_codes;
+
+    for(var i=0;i<9;i++){
+      coins.push({"code":supported_codes[i][0],"name":supported_codes[i][1]})
+    }
+
+   
+    setCurrencies(coins)
+
+
+    
+
+   
+  }
 
   return (
 
@@ -22,8 +51,12 @@ const App: () => Node = () => {
     <View>
       <Picker>
 
-        <Picker.Item label="American Dollar" value="USD" />
-        <Picker.Item label="Euro" value="EUR" />
+      {
+        currencies.map((currency,i)=>{
+          return (<Picker.Item key={i} label={currency.name} value={currency.code}  />)
+        })
+      }
+        
       </Picker>
       
       <View>
