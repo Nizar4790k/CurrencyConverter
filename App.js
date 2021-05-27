@@ -22,8 +22,7 @@ const App: () => Node = () => {
   [baseCurrency, setBaseCurrency] = useState("");
   [targetCurrency, setTargetCurrency] = useState("DOP");
   [targetValue, setTargetValue] = useState(0);
-  
-  [isCorrect,setCorrect]=useState(true);
+  [isCorrect, setCorrect] = useState(true);
 
   useEffect(() => {
 
@@ -39,7 +38,7 @@ const App: () => Node = () => {
 
   useEffect(() => {
 
-    if(baseValue==="" || baseValue===undefined){
+    if (baseValue === "" || baseValue === undefined || baseValue===0) {
       setTargetValue(0)
       return;
     }
@@ -78,8 +77,11 @@ const App: () => Node = () => {
   const onShare = async () => {
     try {
 
+      
+
       const result = await Share.share({
-        message: baseValue.toString() + " " + baseCurrency + "=" + targetCurrency + " " + targetValue.toString()
+        message: "Aqui el valor total de la conversion: "+"\n"
+        +baseValue.toString() + " " + baseCurrency + "=" + targetValue.toString() + " " + targetCurrency
       })
 
       if (result.action === Share.sharedAction) {
@@ -99,15 +101,15 @@ const App: () => Node = () => {
 
   const onChangeText = (value) => {
 
-        
+
     var regex = /^(\d*\.)?\d+$/
 
-    if(regex.test(value)){
+    if (regex.test(value)) {
       setCorrect(true)
-    }else{
+    } else {
       setCorrect(false);
     }
-      
+
 
     setBaseValue(value);
 
@@ -132,12 +134,18 @@ const App: () => Node = () => {
           {
             image: require('./res/share.png'), // To use a custom image
 
-            onPress: () => {onShare()},
+            onPress: () => { onShare() },
           }
         ]}
       />
 
-      <Picker onValueChange={(itemValue) => {
+      
+      
+
+      <View style={styles.container}>
+
+
+      <Picker style={styles.dropdown} onValueChange={(itemValue) => {
 
         setBaseCurrency(itemValue)
 
@@ -145,30 +153,38 @@ const App: () => Node = () => {
 
         {
           currencies.map((currency, i) => {
-            return (<Picker.Item key={i} label={currency.name} value={currency.code} />)
+            return (<Picker.Item key={i} label={currency.name+"-"+currency.code} value={currency.code} />)
           })
         }
 
       </Picker>
 
+      </View>
+      
+
       <View>
-        
-        {isCorrect ? 
-        <TextInput keyboardType='numeric' style={styles.inputBaseCorrect} value={baseValue.toString()} onChangeText={onChangeText} ></TextInput>
-         :
-         <TextInput keyboardType='numeric' style={styles.inputBaseIncorrect} value={baseValue.toString()} onChangeText={onChangeText} ></TextInput>
+
+        {
+          isCorrect ?
+            <TextInput keyboardType='numeric' style={styles.inputBaseCorrect} value={baseValue.toString()} onChangeText={onChangeText} ></TextInput>
+            :
+            <TextInput keyboardType='numeric' style={styles.inputBaseIncorrect} value={baseValue.toString()} onChangeText={onChangeText} ></TextInput>
         }
-        
-        
+
+
       </View>
 
       <View>
+        <View style={styles.targetContainer}>
 
+        
         <Picker enabled={false}>
           <Picker.Item label="Dominican Pesos" value={targetCurrency} />
 
-
+  
         </Picker>
+
+        </View>
 
         {targetValue ?
           <TextInput style={styles.inputTarget} value={targetValue.toString()} enabled={false} ></TextInput>
@@ -201,14 +217,24 @@ var styles = StyleSheet.create({
     height: 40,
     margin: 12,
     borderWidth: 1,
-    borderColor:"#000000"
+    borderColor: "#000000"
   },
   inputBaseIncorrect: {
     height: 40,
     margin: 12,
     borderWidth: 1,
-    borderColor:"#ff0000"
+    borderColor: "#ff0000"
+  },
+  container:{
+    borderColor:"#000000",
+    borderWidth:1,
+    margin:12
+  },
+  targetContainer:{
+    
+    margin:6
   }
+
 });
 
 
