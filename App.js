@@ -9,6 +9,7 @@
 import React,{useEffect,useState} from 'react';
 import type { Node} from 'react';
 import { View, StyleSheet, TextInput, SafeAreaView, Picker } from 'react-native';
+import ActionBar from 'react-native-action-bar';
 
 
 
@@ -45,7 +46,7 @@ useEffect(()=>{
     setBaseCurrency(supported_codes[0][0]);
 
 
-    for(var i=0;i<9;i++){96652
+    for(var i=0;i<9;i++){
       coins.push({"code":supported_codes[i][0],"name":supported_codes[i][1]})
     }
 
@@ -61,8 +62,27 @@ useEffect(()=>{
 
   return (
 
+    
 
     <View>
+
+<ActionBar
+    containerStyle={styles.bar}
+    title={'Currency Converter'}
+    
+    
+    
+    
+    
+    rightIcons={[
+      {
+            image: require('./res/share.png'), // To use a custom image
+            
+            onPress: () => console.log('Right Custom image !'),
+        }
+    ]}
+/>
+    
       <Picker onValueChange={(itemValue)=>{
           
           setBaseCurrency(itemValue)
