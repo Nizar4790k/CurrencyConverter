@@ -15,7 +15,7 @@ import ActionBar from 'react-native-action-bar';
 
 const App: () => Node = () => {
 
-  const API_KEY = "61005f8b63dafdb85ded4930";
+  const API_KEY = "470bf7012335413cff4b9dbb";
 
   [currencies, setCurrencies] = useState([]);
   [baseValue, setBaseValue] = useState(0);
